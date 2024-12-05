@@ -1,0 +1,29 @@
+
+name: Store Repository Structure in MongoDB
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  storeRepoStructure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.8'
+      - name: Install dependencies
+        run: |
+          pip install PyGithub pymongo python-dotenv
+      - name: Store Repository Structure in MongoDB
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MONGODB_URI: "mongodb+srv://learnlink:learnlink@cluster0.ptp95.mongodb.net/learnlink"
+        run: |
+          python ./store_repo_structure.py
